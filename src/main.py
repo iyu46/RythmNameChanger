@@ -13,7 +13,10 @@ from discord.ext import commands
 from discord.ext.commands import CommandNotFound
 
 # define constants (be sure to set values in tokens.json before running!)
-BOT_TOKEN = data['bot_token']
+if 'BOT_TOKEN' in os.environ:
+    BOT_TOKEN = os.environ['BOT_TOKEN']
+else:
+    BOT_TOKEN = data['bot_token']
 API_KEY = data['bot_apiKey']
 SERVER_ID = -1 #insert server ID here
 BOT_ID = -1 #insert bot ID here
