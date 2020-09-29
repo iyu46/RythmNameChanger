@@ -6,18 +6,17 @@ import json
 #sys: temp import
 import sys
 import discord
-with open('config/tokens.json') as f:
-    data = json.load(f)
 
 from discord.ext import commands
 from discord.ext.commands import CommandNotFound
 
 # define constants (be sure to set values in tokens.json before running!)
 if 'BOT_TOKEN' in os.environ:
-    BOT_TOKEN = os.environ['BOT_TOKEN']
+    BOT_TOKEN = os.environ.get('BOT_TOKEN', None);
 else:
+    with open('config/tokens.json') as f:
+        data = json.load(f)
     BOT_TOKEN = data['bot_token']
-API_KEY = data['bot_apiKey']
 SERVER_ID = -1 #insert server ID here
 BOT_ID = -1 #insert bot ID here
 RYTHM_ID = int(235088799074484224)
