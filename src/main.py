@@ -114,10 +114,18 @@ async def on_message(message):
         return
 
     # check content of message, extract and concatenate string, check deletemsgs, set nickname
-    if "**Playing** 🎶" in message.content and message.author.id == RYTHM_ID:
-        stringLength = len(message.content) - 8
-        n = message.content[15:stringLength]
-        nickname = n
+    if message.author.id == RYTHM_ID:
+        n = ''
+        if "**Playing** 🎶" in message.content:
+            stringLength = len(message.content) - 8
+            n = message.content[15:stringLength]
+            nickname = n
+        elif len(message.embeds) != 0:
+            if message.embeds[0].description[0] == "[":
+                m = message.embeds[0].description.split('\n')
+                if len(m) > 1:
+                    n = m[0].split("](http", 1)[0].split("[",1)[1]
+                    nickname = n
         if len(n) < 2:
             return
         if len(n) >= 32:
