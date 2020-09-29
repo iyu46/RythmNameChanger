@@ -24,24 +24,27 @@ BOT_ID = -1 #insert bot ID here
 RYTHM_ID = int(235088799074484224)
 
 bot = commands.Bot(command_prefix='!mbnc ')
+bot.active = True
+bot.deletemsgs = False
+bot.stored_nickname = "Rythm"
 
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
-    with open('./config/config.json') as f:
-        inp = json.load(f)
-    if not inp['stored_nickname']:
-        newdata = { "active": inp['active'], "deletemsgs": inp['deletemsgs'], "stored_nickname": "Rythm" }
-        with open('./config/config.json', 'w') as outfile:
-            json.dump(newdata, outfile)
+    # with open('./config/config.json') as f:
+    #     inp = json.load(f)
+    # if not inp['stored_nickname']:
+    #     newdata = { "active": inp['active'], "deletemsgs": inp['deletemsgs'], "stored_nickname": "Rythm" }
+    #     with open('./config/config.json', 'w') as outfile:
+    #         json.dump(newdata, outfile)
 
 
 
 @bot.command(name='active', help='Sets whether or not the bot is currently active.')
 async def active(ctx, state):
     # import saved configs in session
-    with open('./config/config.json') as f:
-        inp = json.load(f)
+    # with open('./config/config.json') as f:
+    #     inp = json.load(f)
     # try-catch check and convert input parameter to boolean, catch and end if invalid
     try:
         if state == "on":
@@ -55,21 +58,23 @@ async def active(ctx, state):
         await ctx.send('Input state is invalid')
         return
     # compare input state to saved state and perform action
-    if s == inp['active']:
+    #if s == inp['active']:
+    if s == bot.active:
         response = "active is already %s!" % s
         await ctx.send(response.lower())
     else:
-        newdata = { "active": s, "deletemsgs": inp['deletemsgs'], "stored_nickname": inp['stored_nickname'] }
-        with open('./config/config.json', 'w') as outfile:
-            json.dump(newdata, outfile)
+        # newdata = { "active": s, "deletemsgs": inp['deletemsgs'], "stored_nickname": inp['stored_nickname'] }
+        # with open('./config/config.json', 'w') as outfile:
+        #     json.dump(newdata, outfile)
+        bot.active = s
         response = "active has been set to %s!" % s
         await ctx.send(response.lower())
 
 @bot.command(name='deletemsgs', help='Sets whether or not the bot deletes the Now Playing message from the music bot it pulls from.')
 async def deletemsgs(ctx, state):
     # import saved configs in session
-    with open('./config/config.json') as f:
-        inp = json.load(f)
+    # with open('./config/config.json') as f:
+    #     inp = json.load(f)
     # try-catch check and convert input parameter to boolean, catch and end if invalid
     try:
         if state == "on":
@@ -83,13 +88,15 @@ async def deletemsgs(ctx, state):
         await ctx.send('Input state is invalid')
         return
     # compare input state to saved state and perform action
-    if s == inp['deletemsgs']:
+    # if s == inp['deletemsgs']:
+    if s == bot.deletemsgs:
         response = "deletemsgs is already %s!" % s
         await ctx.send(response.lower())
     else:
-        newdata = { "active": inp['active'], "deletemsgs": s, "stored_nickname": inp['stored_nickname'] }
-        with open('./config/config.json', 'w') as outfile:
-            json.dump(newdata, outfile)
+        # newdata = { "active": inp['active'], "deletemsgs": s, "stored_nickname": inp['stored_nickname'] }
+        # with open('./config/config.json', 'w') as outfile:
+        #     json.dump(newdata, outfile)
+        bot.deletemsgs = s
         response = "deletemsgs has been set to %s!" % s
         await ctx.send(response.lower())
     
@@ -98,9 +105,10 @@ async def on_message(message):
     # check message for bot commands first
     await bot.process_commands(message)
     # check preconditions to make sure subroutine can run without issue
-    with open('./config/config.json') as f:
-        inp = json.load(f)
-    if not inp['active']:
+    # with open('./config/config.json') as f:
+    #     inp = json.load(f)
+    # if not inp['active']:
+    if not bot.active:
         return
     if message.author == bot.user:
         return
@@ -114,7 +122,8 @@ async def on_message(message):
             return
         if len(n) >= 32:
             nickname = n[0:32]
-        if inp['deletemsgs']:
+        # if inp['deletemsgs']:
+        if bot.deletemsgs:
             await message.delete()
         await message.author.edit(nick=nickname)
 
