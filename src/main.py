@@ -16,7 +16,7 @@ if 'BOT_TOKEN' in os.environ:
     if not BOT_TOKEN:
         BOT_TOKEN = os.getenv('BOT_TOKEN');
 else:
-    with open('config/tokens.json') as f:
+    with open('./config/tokens.json') as f:
         data = json.load(f)
     BOT_TOKEN = data['bot_token']
 SERVER_ID = -1 #insert server ID here
@@ -28,11 +28,11 @@ bot = commands.Bot(command_prefix='!mbnc ')
 @bot.event
 async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
-    with open('config/config.json') as f:
+    with open('./config/config.json') as f:
         inp = json.load(f)
     if not inp['stored_nickname']:
         newdata = { "active": inp['active'], "deletemsgs": inp['deletemsgs'], "stored_nickname": "Rythm" }
-        with open('config/config.json', 'w') as outfile:
+        with open('./config/config.json', 'w') as outfile:
             json.dump(newdata, outfile)
 
 
@@ -40,7 +40,7 @@ async def on_ready():
 @bot.command(name='active', help='Sets whether or not the bot is currently active.')
 async def active(ctx, state):
     # import saved configs in session
-    with open('config/config.json') as f:
+    with open('./config/config.json') as f:
         inp = json.load(f)
     # try-catch check and convert input parameter to boolean, catch and end if invalid
     try:
@@ -60,7 +60,7 @@ async def active(ctx, state):
         await ctx.send(response.lower())
     else:
         newdata = { "active": s, "deletemsgs": inp['deletemsgs'], "stored_nickname": inp['stored_nickname'] }
-        with open('config/config.json', 'w') as outfile:
+        with open('./config/config.json', 'w') as outfile:
             json.dump(newdata, outfile)
         response = "active has been set to %s!" % s
         await ctx.send(response.lower())
@@ -68,7 +68,7 @@ async def active(ctx, state):
 @bot.command(name='deletemsgs', help='Sets whether or not the bot deletes the Now Playing message from the music bot it pulls from.')
 async def deletemsgs(ctx, state):
     # import saved configs in session
-    with open('config/config.json') as f:
+    with open('./config/config.json') as f:
         inp = json.load(f)
     # try-catch check and convert input parameter to boolean, catch and end if invalid
     try:
@@ -88,7 +88,7 @@ async def deletemsgs(ctx, state):
         await ctx.send(response.lower())
     else:
         newdata = { "active": inp['active'], "deletemsgs": s, "stored_nickname": inp['stored_nickname'] }
-        with open('config/config.json', 'w') as outfile:
+        with open('./config/config.json', 'w') as outfile:
             json.dump(newdata, outfile)
         response = "deletemsgs has been set to %s!" % s
         await ctx.send(response.lower())
@@ -98,7 +98,7 @@ async def on_message(message):
     # check message for bot commands first
     await bot.process_commands(message)
     # check preconditions to make sure subroutine can run without issue
-    with open('config/config.json') as f:
+    with open('./config/config.json') as f:
         inp = json.load(f)
     if not inp['active']:
         return
