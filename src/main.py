@@ -41,7 +41,7 @@ async def active(ctx, state):
         inp = json.load(f)
     # try-catch check and convert input parameter to boolean, catch and end if invalid
     try:
-        if state == "on": 
+        if state == "on":
             s = True
         elif state == "off":
             s = False
@@ -69,7 +69,7 @@ async def deletemsgs(ctx, state):
         inp = json.load(f)
     # try-catch check and convert input parameter to boolean, catch and end if invalid
     try:
-        if state == "on": 
+        if state == "on":
             s = True
         elif state == "off":
             s = False
@@ -103,7 +103,7 @@ async def on_message(message):
         return
 
     # check content of message, extract and concatenate string, check deletemsgs, set nickname
-    if "**Playing** 🎶" in message.content:
+    if "**Playing** 🎶" in message.content and message.author.id == RYTHM_ID:
         stringLength = len(message.content) - 8
         n = message.content[15:stringLength]
         nickname = n
