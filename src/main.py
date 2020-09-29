@@ -13,6 +13,8 @@ from discord.ext.commands import CommandNotFound
 # define constants (be sure to set values in tokens.json before running!)
 if 'BOT_TOKEN' in os.environ:
     BOT_TOKEN = os.environ.get('BOT_TOKEN', None);
+    if not BOT_TOKEN:
+        BOT_TOKEN = os.getenv('BOT_TOKEN');
 else:
     with open('config/tokens.json') as f:
         data = json.load(f)
@@ -22,7 +24,6 @@ BOT_ID = -1 #insert bot ID here
 RYTHM_ID = int(235088799074484224)
 
 bot = commands.Bot(command_prefix='!mbnc ')
-
 
 @bot.event
 async def on_ready():
